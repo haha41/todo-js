@@ -1,4 +1,3 @@
-import { useState } from "react";
 import "./App.css";
 import { create } from "zustand";
 
@@ -12,32 +11,56 @@ const useTodoList = create((set) => {
         completed: false,
       },
     ],
-    // // 액션
-    // createTodo: (todo) => {
-    //   set()
-    // }
+    // 액션
+    createTodo: (todo) => {
+      set((state) => {
+        const newList = [
+          ...state.list,
+          {
+            id: new Date().getTime(),
+            todo,
+            completed: false,
+          },
+        ];
+
+        // set 함수를 호출할때의 규칙
+        // 반드시 온전한 state를 반환해라!
+        return {
+          ...state,
+          list: newList,
+        };
+      });
+    },
   };
 });
 
 function App() {
-  const { list } = useTodoList();
-  // const [list, setList] = useState([]);
-  // const onSubmit = (e) => {
-  //   e.preventDefault();
-  //   const form = e.currentTarget;
-  //   const formData = new FormData(form);
-  //   const todo = formData.get("todo");
-  //   const newList = [
-  //     ...list,
-  //     {
-  //       id: new Date().getTime(),
-  //       todo,
-  //       completed: false,
-  //     },
-  //   ];
-  //   setList(newList);
-  //   form.reset();
-  // };
+  const { list, createTodo } = useTodoList();
+  // const [list, setList] = useState([
+  //   {
+  //     id: new Date().getTime(),
+  //     todo: "투두",
+  //     completed: false,
+  //   },
+  // ]);
+  const onSubmit = (e) => {
+    e.preventDefault();
+    // 값을 가공하는 부분[s]
+    // 폼을 가져오고
+    const form = e.currentTarget;
+    // 폼 데이터로 만들고
+    const formData = new FormData(form);
+    // input 의 값을 읽어온 다음에
+    const todo = formData.get("todo");
+    // 값을 가공하는 부분[e]
+
+    // zustand 액션 호출!
+    // 값만 넘기는게 포인트
+    createTodo(todo);
+
+    // 폼 리셋
+    form.reset();
+  };
   // console.log(list);
   // const complete = (id) => {
   //   const newList = list.map((data) => {
@@ -148,8 +171,7 @@ function App() {
               </div>
             );
           })}
-          {/* <form onSubmit={onSubmit}> */}
-          <form>
+          <form onSubmit={onSubmit}>
             <div className="flex items-center w-full mt-2">
               {/* submit button[s] */}
               <button
