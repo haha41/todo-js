@@ -135,21 +135,25 @@ const useTodoList = create(
       },
       deleteTodo: (id) => {
         set((state) => {
-          // set 함수를 호출할때의 규칙
-          // 반드시 온전한 state를 반환해라!
-          const newList = state.list.filter((data) => {
-            // false 를 리턴하면 배열에서 제외
-            if (data.id === id) {
-              return false;
-            }
-            // true 를 리턴하면 배열안에 포함
-            return true;
-          });
+          // // set 함수를 호출할때의 규칙
+          // // 반드시 온전한 state를 반환해라!
+          // const newList = state.list.filter((data) => {
+          //   // false 를 리턴하면 배열에서 제외
+          //   if (data.id === id) {
+          //     return false;
+          //   }
+          //   // true 를 리턴하면 배열안에 포함
+          //   return true;
+          // });
 
-          return {
-            ...state,
-            list: newList,
-          };
+          // return {
+          //   ...state,
+          //   list: newList,
+          // };
+          const index = state.list.findIndex((item) => {
+            return item.id === id;
+          });
+          state.list.splice(index);
         });
       },
     };
