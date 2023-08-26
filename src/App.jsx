@@ -31,11 +31,32 @@ const useTodoList = create((set) => {
         };
       });
     },
+    updateTodo: (id) => {
+      set((state) => {
+        const newList = state.list.map((data) => {
+          if (data.id === id) {
+            return {
+              ...data,
+              completed: !data.completed,
+            };
+          }
+
+          return data;
+        });
+
+        // set 함수를 호출할때의 규칙
+        // 반드시 온전한 state를 반환해라!
+        return {
+          ...state,
+          list: newList,
+        };
+      });
+    },
   };
 });
 
 function App() {
-  const { list, createTodo } = useTodoList();
+  const { list, createTodo, updateTodo } = useTodoList();
   // const [list, setList] = useState([
   //   {
   //     id: new Date().getTime(),
@@ -61,18 +82,18 @@ function App() {
     // 폼 리셋
     form.reset();
   };
-  // console.log(list);
+  console.log(list);
   // const complete = (id) => {
-  //   const newList = list.map((data) => {
-  //     if (data.id === id) {
-  //       return {
-  //         ...data,
-  //         completed: !data.completed,
-  //       };
-  //     }
+  // const newList = list.map((data) => {
+  //   if (data.id === id) {
+  //     return {
+  //       ...data,
+  //       completed: !data.completed,
+  //     };
+  //   }
 
-  //     return data;
-  //   });
+  //   return data;
+  // });
   //   setList(newList);
   // };
   // const deleteTodo = (id) => {
@@ -123,7 +144,7 @@ function App() {
                     defaultChecked={completed}
                   />
                   <span
-                    // onClick={() => complete(id)}
+                    onClick={() => updateTodo(id)}
                     name="check"
                     className="peer-checked:bg-green-500 peer-checked:border-green-500 peer-checked:text-white flex items-center justify-center w-5 h-5 text-transparent border-2 border-gray-500 rounded-full"
                   >
