@@ -1,56 +1,69 @@
 import { useState } from "react";
 import "./App.css";
+import { create } from "zustand";
 
-function App() {
-  const [list, setList] = useState([
-    {
-      id: new Date().getTime(),
-      todo: "투두",
-      completed: false,
-    },
-  ]);
-  const onSubmit = (e) => {
-    e.preventDefault();
-    const form = e.currentTarget;
-    const formData = new FormData(form);
-    const todo = formData.get("todo");
-    const newList = [
-      ...list,
+const useTodoList = create((set) => {
+  return {
+    // 상태
+    list: [
       {
         id: new Date().getTime(),
-        todo,
+        todo: "투두",
         completed: false,
       },
-    ];
-    setList(newList);
-    form.reset();
+    ],
+    // // 액션
+    // createTodo: (todo) => {
+    //   set()
+    // }
   };
-  console.log(list);
-  const complete = (id) => {
-    const newList = list.map((data) => {
-      if (data.id === id) {
-        return {
-          ...data,
-          completed: !data.completed,
-        };
-      }
+});
 
-      return data;
-    });
-    setList(newList);
-  };
-  const deleteTodo = (id) => {
-    const newList = list.filter((data) => {
-      // false 를 리턴하면 배열에서 제외
-      if (data.id === id) {
-        return false;
-      }
-      // true 를 리턴하면 배열안에 포함
-      return true;
-    });
+function App() {
+  const { list } = useTodoList();
+  // const [list, setList] = useState([]);
+  // const onSubmit = (e) => {
+  //   e.preventDefault();
+  //   const form = e.currentTarget;
+  //   const formData = new FormData(form);
+  //   const todo = formData.get("todo");
+  //   const newList = [
+  //     ...list,
+  //     {
+  //       id: new Date().getTime(),
+  //       todo,
+  //       completed: false,
+  //     },
+  //   ];
+  //   setList(newList);
+  //   form.reset();
+  // };
+  // console.log(list);
+  // const complete = (id) => {
+  //   const newList = list.map((data) => {
+  //     if (data.id === id) {
+  //       return {
+  //         ...data,
+  //         completed: !data.completed,
+  //       };
+  //     }
 
-    setList(newList);
-  };
+  //     return data;
+  //   });
+  //   setList(newList);
+  // };
+  // const deleteTodo = (id) => {
+  //   const newList = list.filter((data) => {
+  //     // false 를 리턴하면 배열에서 제외
+  //     if (data.id === id) {
+  //       return false;
+  //     }
+  //     // true 를 리턴하면 배열안에 포함
+  //     return true;
+  //   });
+
+  //   setList(newList);
+  // };
 
   return (
     <div className="flex items-center justify-center w-screen h-screen font-medium">
@@ -87,7 +100,7 @@ function App() {
                     defaultChecked={completed}
                   />
                   <span
-                    onClick={() => complete(id)}
+                    // onClick={() => complete(id)}
                     name="check"
                     className="peer-checked:bg-green-500 peer-checked:border-green-500 peer-checked:text-white flex items-center justify-center w-5 h-5 text-transparent border-2 border-gray-500 rounded-full"
                   >
@@ -111,7 +124,7 @@ function App() {
                     {todo}
                   </span>
                   <button
-                    onClick={() => deleteTodo(id)}
+                    // onClick={() => deleteTodo(id)}
                     name="delete"
                     className="hidden group-hover:block"
                   >
@@ -135,7 +148,8 @@ function App() {
               </div>
             );
           })}
-          <form onSubmit={onSubmit}>
+          {/* <form onSubmit={onSubmit}> */}
+          <form>
             <div className="flex items-center w-full mt-2">
               {/* submit button[s] */}
               <button
