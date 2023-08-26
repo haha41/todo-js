@@ -110,24 +110,27 @@ const useTodoList = create(
         });
       },
       updateTodo: (id) => {
+        // set((state) => {
+        //   const newList = state.list.map((data) => {
+        //     if (data.id === id) {
+        //       return {
+        //         ...data,
+        //         completed: !data.completed,
+        //       };
+        //     }
+
+        //     return data;
+        //   });
+        //   return {
+        //     ...state,
+        //     list: newList,
+        //   };
+        // });
         set((state) => {
-          const newList = state.list.map((data) => {
-            if (data.id === id) {
-              return {
-                ...data,
-                completed: !data.completed,
-              };
-            }
-
-            return data;
+          const index = state.list.findIndex((item) => {
+            return item.id === id;
           });
-
-          // set 함수를 호출할때의 규칙
-          // 반드시 온전한 state를 반환해라!
-          return {
-            ...state,
-            list: newList,
-          };
+          state.list[index].completed = !state.list[index].completed;
         });
       },
       deleteTodo: (id) => {
