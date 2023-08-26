@@ -52,11 +52,30 @@ const useTodoList = create((set) => {
         };
       });
     },
+    deleteTodo: (id) => {
+      set((state) => {
+        // set 함수를 호출할때의 규칙
+        // 반드시 온전한 state를 반환해라!
+        const newList = state.list.filter((data) => {
+          // false 를 리턴하면 배열에서 제외
+          if (data.id === id) {
+            return false;
+          }
+          // true 를 리턴하면 배열안에 포함
+          return true;
+        });
+
+        return {
+          ...state,
+          list: newList,
+        };
+      });
+    },
   };
 });
 
 function App() {
-  const { list, createTodo, updateTodo } = useTodoList();
+  const { list, createTodo, updateTodo, deleteTodo } = useTodoList();
   // const [list, setList] = useState([
   //   {
   //     id: new Date().getTime(),
@@ -168,7 +187,7 @@ function App() {
                     {todo}
                   </span>
                   <button
-                    // onClick={() => deleteTodo(id)}
+                    onClick={() => deleteTodo(id)}
                     name="delete"
                     className="hidden group-hover:block"
                   >
